@@ -45,14 +45,18 @@ func NewRouter(log *logrus.Logger, provider TokenProvider, store ProfileStore, h
 		r.Use(middleware.RequestLogger(&middleware.DefaultLogFormatter{Logger: log, NoColor: true}))
 		r.Use(middleware.Timeout(30 * time.Second))
 		r.Use(middleware.Throttle(100))
-		r.Route("/v1", func(r chi.Router) {
-			r.Get("/authenticate", handler.authenticate)
-			r.Get("/signIn", handler.signIn)
-			r.Get("/verify", handler.verify)
-			r.Group(func(r chi.Router) {
-				r.Use(handler.auth)
-				// protected endpoints
+		r.Route("/public", func(r chi.Router) {
+			r.Route("/v1", func(r chi.Router) {
+				r.Get("/authenticate", handler.authenticate)
+				r.Get("/signIn", handler.signIn)
+				r.Get("/verify", handler.verify)
+				r.Group(func(r chi.Router) {
+					r.Use(handler.auth)
+					// protected endpoints
+				})
 			})
+		})
+		r.Route("/private", func(r chi.Router) {
 		})
 	})
 	return r

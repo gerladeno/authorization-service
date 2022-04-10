@@ -11,12 +11,23 @@ services:
     ports:
       - "5433:5432"
     command: [ "postgres", "-c", "log_statement=all" ]
+    networks:
+      - auth-network
 
   auth-service:
     build:
       context: .
+    ports:
+      - "3000:3000"
     container_name: auth-service
     restart: on-failure
+    networks:
+      - auth-network
+    env_file:
+      - .env
 
 volumes:
   auth_pg:
+
+networks:
+  auth-network:

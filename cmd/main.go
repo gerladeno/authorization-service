@@ -4,9 +4,11 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/gerladeno/authorization-service/dev"
 	"net/http"
 	"os"
 	"os/signal"
+	"strings"
 	"syscall"
 	"time"
 
@@ -30,7 +32,11 @@ func main() {
 	log := GetLogger(true)
 	log.Infof("starting authorization service version %s", version)
 	if err := godotenv.Load(); err != nil {
-		log.Panic(err)
+		if dev.RunsInContainer() {
+			log.Warn(err)
+		} else {
+			log.Panic(err)
+		}
 	}
 
 	var (
@@ -41,6 +47,9 @@ func main() {
 		host            = "localhost"
 		pgDSN           = os.Getenv("PG_DSN")
 	)
+	if dev.RunsInContainer() {
+		pgDSN = strings.ReplaceAll(pgDSN, "localhost:5433", "auth_pg:5432")
+	}
 	ctx := context.Background()
 	pg, err := profilestore.GetPGStore(ctx, log, pgDSN)
 	if err != nil {
