@@ -19,5 +19,4 @@ jobs:
         if_key_exists: replace # fail # replace / ignore / fail; optional (defaults to fail)
     - name: Push to server
       run: |
-        chmod 600 .ssh/id_rsa_pavela
         ssh -o StrictHostKeyChecking=no developer@46.188.53.73 'cd /home/developer/homie/authorization-service;git pull;make rebuild'
