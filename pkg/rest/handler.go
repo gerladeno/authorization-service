@@ -2,6 +2,7 @@ package rest
 
 import (
 	"errors"
+	"github.com/google/uuid"
 	"net/http"
 
 	"github.com/gerladeno/authorization-service/pkg/common"
@@ -64,7 +65,13 @@ func (h *handler) signIn(w http.ResponseWriter, r *http.Request) {
 	switch {
 	case err == nil:
 	case errors.Is(err, common.ErrPhoneNotFound):
-		user = &models.User{Phone: phone}
+		id, e := uuid.NewUUID()
+		if e != nil {
+			h.log.Warnf("err generating user uuid: %v", err)
+			writeErrResponse(w, "Internal server error", http.StatusInternalServerError)
+			return
+		}
+		user = &models.User{Phone: phone, UUID: id.String()}
 	default:
 		h.log.Warnf("err finding user in signIn: %v", err)
 		writeErrResponse(w, "Internal server error", http.StatusInternalServerError)
