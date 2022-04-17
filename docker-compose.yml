@@ -25,6 +25,7 @@ services:
       - auth-network
     environment:
       PG_DSN: ${PG_DSN}
+      PRIVATE_SIGNING_KEY: ${PRIVATE_SIGNING_KEY}
 
 volumes:
   auth_pg:

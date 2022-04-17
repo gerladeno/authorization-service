@@ -68,7 +68,7 @@ func mustGetPrivateKey(encodedKey string) *rsa.PrivateKey {
 		panic(err)
 	}
 	if len(keyBytes) == 0 {
-		panic("neither file private_rsa_key.pem nor env PRIVATE_SIGNING_KEY are set")
+		panic("env PRIVATE_SIGNING_KEY not set")
 	}
 	block, _ := pem.Decode(keyBytes)
 	if block == nil {
