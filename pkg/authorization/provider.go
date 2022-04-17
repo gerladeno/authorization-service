@@ -53,7 +53,7 @@ func (a *Authorizer) SignIn(ctx context.Context, user *models.User, code string)
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodRS256, &Claims{
 		StandardClaims: jwt.StandardClaims{},
-		ID:             user.ID,
+		ID:             user.UUID,
 	})
 	return token.SignedString(a.key)
 }
