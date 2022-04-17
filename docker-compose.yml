@@ -1,19 +1,4 @@
 services:
-  auth_pg:
-    image: postgres
-    container_name: auth_pg
-    environment:
-      POSTGRES_USER: auth
-      POSTGRES_PASSWORD: auth_secret
-      POSTGRES_DB: postgres
-    volumes:
-      - auth_pg:/var/lib/postgresql/data/
-    ports:
-      - "5433:5432"
-    command: [ "postgres", "-c", "log_statement=all" ]
-    networks:
-      - auth-network
-
   auth-service:
     build:
       context: .
@@ -21,14 +6,6 @@ services:
       - "3000:3000"
     container_name: auth-service
     restart: on-failure
-    networks:
-      - auth-network
     environment:
       PG_DSN: ${PG_DSN}
       PRIVATE_SIGNING_KEY: ${PRIVATE_SIGNING_KEY}
-
-volumes:
-  auth_pg:
-
-networks:
-  auth-network:

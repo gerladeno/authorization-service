@@ -87,7 +87,7 @@ func (pg *PG) Migrate(direction migrate.MigrationDirection) error {
 }
 
 func (pg *PG) GetUser(ctx context.Context, phone string) (*models.User, error) {
-	query := fmt.Sprintf(`SELECT id, username, phone, created, updated
+	query := fmt.Sprintf(`SELECT uuid, username, phone, created, updated
 FROM user_model
 WHERE phone = '%s';`, phone)
 	var started time.Time
@@ -113,11 +113,11 @@ WHERE phone = '%s';`, phone)
 
 func (pg *PG) UpsertUser(ctx context.Context, user *models.User) error {
 	query := `
-INSERT INTO user_model (id, username, phone, created, updated)
+INSERT INTO user_model (uuid, username, phone, created, updated)
 VALUES ($1, $2, $3, $4, $5)
-ON CONFLICT (id) DO UPDATE SET username = excluded.username,
-                               phone= excluded.phone,
-                               updated  = NOW()
+ON CONFLICT (uuid) DO UPDATE SET username = excluded.username,
+                               phone      = excluded.phone,
+                               updated    = NOW()
 ;`
 	var started time.Time
 	var err error
@@ -125,7 +125,7 @@ ON CONFLICT (id) DO UPDATE SET username = excluded.username,
 	for i := 0; i < common.GlobalRequestRetries; i++ {
 		started = time.Now()
 		result, err = pg.db.Exec(
-			ctx, query, user.ID, user.Username, user.Phone,
+			ctx, query, user.UUID, user.Username, user.Phone,
 			time.Now().UTC().Format(common.PGDatetimeFmt), time.Now().UTC().Format(common.PGDatetimeFmt))
 		if err != nil {
 			pg.metrics.ErrsTotal.WithLabelValues("UpsertUser").Inc()

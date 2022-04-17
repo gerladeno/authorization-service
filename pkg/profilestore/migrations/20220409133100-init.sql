@@ -5,7 +5,7 @@
 
 CREATE TABLE user_model
 (
-    id       text NOT NULL
+    uuid     text NOT NULL
         CONSTRAINT uuid_pk PRIMARY KEY,
     username text NOT NULL,
     phone    text NOT NULL,
