@@ -19,4 +19,4 @@ jobs:
         if_key_exists: replace # fail # replace / ignore / fail; optional (defaults to fail)
     - name: Push to server
       run: |
-        ssh -o StrictHostKeyChecking=no developer@46.188.53.73 'cd /home/developer/homie/authorization-service;git pull;PG_DSN=${{ secrets.PG_DSN }} PRIVATE_SIGNING_KEY=${{ secrets.PRIVATE_SIGNING_KEY }} make rebuild'
+        ssh -o StrictHostKeyChecking=no developer@{{ secrets.HOST }} 'cd /home/developer/homie/authorization-service;git pull;PG_DSN=${{ secrets.PG_DSN }} PRIVATE_SIGNING_KEY=${{ secrets.PRIVATE_SIGNING_KEY }} make rebuild'
