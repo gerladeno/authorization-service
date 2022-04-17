@@ -2,8 +2,9 @@ package rest
 
 import (
 	"errors"
-	"github.com/google/uuid"
 	"net/http"
+
+	"github.com/google/uuid"
 
 	"github.com/gerladeno/authorization-service/pkg/common"
 	"github.com/gerladeno/authorization-service/pkg/models"
@@ -97,7 +98,7 @@ func (h *handler) signIn(w http.ResponseWriter, r *http.Request) {
 		writeErrResponse(w, "Internal server error", http.StatusInternalServerError)
 		return
 	}
-	writeResponse(w, map[string]string{"token": token})
+	writeResponse(w, map[string]string{"uuid": user.UUID, "token": token})
 }
 
 func (h *handler) verify(w http.ResponseWriter, r *http.Request) {

@@ -4,13 +4,14 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/gerladeno/authorization-service/pkg/common"
 	"net/http"
 	"os"
 	"os/signal"
 	"strings"
 	"syscall"
 	"time"
+
+	"github.com/gerladeno/authorization-service/pkg/common"
 
 	migrate "github.com/rubenv/sql-migrate"
 
