@@ -23,6 +23,8 @@ services:
     restart: on-failure
     networks:
       - auth-network
+    environment:
+      PG_DSN: ${PG_DSN}
 
 volumes:
   auth_pg:

@@ -33,7 +33,7 @@ func main() {
 	log.Infof("starting authorization service version %s", version)
 	if err := godotenv.Load(); err != nil {
 		if common.RunsInContainer() {
-			log.Warn(err)
+			log.Infof("running in container, no .env file: %v", err)
 		} else {
 			log.Panic(err)
 		}
