@@ -1,3 +1,4 @@
 .env
 private.pem
 private_unencrypted.pem
+public.pub

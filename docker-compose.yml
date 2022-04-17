@@ -23,8 +23,6 @@ services:
     restart: on-failure
     networks:
       - auth-network
-    env_file:
-      - .env
 
 volumes:
   auth_pg:
