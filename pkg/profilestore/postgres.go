@@ -115,7 +115,7 @@ func (pg *PG) UpsertUser(ctx context.Context, user *models.User) error {
 	query := `
 INSERT INTO user_model (uuid, phone, created, updated)
 VALUES ($1, $2, $3, $4)
-ON CONFLICT (uuid) DO UPDATE SET phone      = excluded.phone,
+ON CONFLICT (phone) DO UPDATE SET phone     = excluded.phone,
                                  updated    = NOW()
 ;`
 	var started time.Time

@@ -7,7 +7,8 @@ CREATE TABLE user_model
 (
     uuid     text NOT NULL
         CONSTRAINT uuid_pk PRIMARY KEY,
-    phone    text NOT NULL,
+    phone    text NOT NULL
+        CONSTRAINT unique_phone UNIQUE,
     created  timestamp DEFAULT NOW(),
     updated  timestamp DEFAULT NOW()
 );
