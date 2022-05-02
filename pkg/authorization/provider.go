@@ -22,7 +22,7 @@ type Authenticator interface {
 
 type Claims struct {
 	jwt.StandardClaims
-	ID string `json:"id"`
+	UUID string `json:"uuid"`
 }
 
 type Authorizer struct {
@@ -53,7 +53,7 @@ func (a *Authorizer) SignIn(ctx context.Context, user *models.User, code string)
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodRS256, &Claims{
 		StandardClaims: jwt.StandardClaims{},
-		ID:             user.UUID,
+		UUID:           user.UUID,
 	})
 	return token.SignedString(a.key)
 }
@@ -96,7 +96,7 @@ func parseToken(accessToken string, key *rsa.PrivateKey) (string, error) {
 		return "", err
 	}
 	if claims, ok := token.Claims.(*Claims); ok && token.Valid {
-		return claims.ID, nil
+		return claims.UUID, nil
 	}
 	return "", common.ErrInvalidAccessToken
 }
