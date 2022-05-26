@@ -58,6 +58,14 @@ func (a *Authorizer) SignIn(ctx context.Context, user *models.User, code string)
 	return token.SignedString(a.key)
 }
 
+func (a *Authorizer) GetToken(uuid string) (string, error) {
+	token := jwt.NewWithClaims(jwt.SigningMethodRS256, &Claims{
+		StandardClaims: jwt.StandardClaims{},
+		UUID:           uuid,
+	})
+	return token.SignedString(a.key)
+}
+
 func (a *Authorizer) StartAuthentication(ctx context.Context, user *models.User) error {
 	return a.auth.VerifyPhone(ctx, user.Phone)
 }

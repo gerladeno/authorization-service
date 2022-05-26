@@ -2,6 +2,7 @@ package rest
 
 import (
 	"errors"
+	"github.com/go-chi/chi/v5"
 	"net/http"
 
 	"github.com/google/uuid"
@@ -119,4 +120,24 @@ func (h *handler) verify(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	writeResponse(w, map[string]string{"userId": id})
+}
+
+func (h *handler) getToken(w http.ResponseWriter, r *http.Request) {
+	id := chi.URLParam(r, "uuid")
+	if !isValidUUID(id) {
+		writeErrResponse(w, "Bad request", http.StatusBadRequest)
+		return
+	}
+	token, err := h.provider.GetToken(id)
+	if err != nil {
+		h.log.Warnf("err parsing token: %v", err)
+		writeErrResponse(w, "Internal server error", http.StatusInternalServerError)
+		return
+	}
+	writeResponse(w, map[string]string{"uuid": id, "token": token})
+}
+
+func isValidUUID(u string) bool {
+	_, err := uuid.Parse(u)
+	return err == nil
 }

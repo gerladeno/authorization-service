@@ -21,6 +21,7 @@ type TokenProvider interface {
 	StartAuthentication(ctx context.Context, user *models.User) error
 	SignIn(ctx context.Context, user *models.User, code string) (string, error)
 	ParseToken(accessToken string) (string, error)
+	GetToken(uuid string) (string, error)
 }
 
 type ProfileStore interface {
@@ -57,6 +58,10 @@ func NewRouter(log *logrus.Logger, provider TokenProvider, store ProfileStore, h
 			})
 		})
 		r.Route("/private", func(r chi.Router) {
+			r.Use(handler.customAuth)
+			r.Route("/v1", func(r chi.Router) {
+				r.Get("/token/{uuid}", handler.getToken)
+			})
 		})
 	})
 	return r

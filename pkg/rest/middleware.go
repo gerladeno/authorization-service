@@ -45,3 +45,15 @@ func (h *handler) auth(next http.Handler) http.Handler {
 	}
 	return http.HandlerFunc(fn)
 }
+
+func (h *handler) customAuth(next http.Handler) http.Handler {
+	var fn http.HandlerFunc = func(w http.ResponseWriter, r *http.Request) {
+		secret := r.Header.Get("key")
+		if secret != "secret_key" {
+			writeErrResponse(w, "Unauthorized", http.StatusUnauthorized)
+			return
+		}
+		next.ServeHTTP(w, r)
+	}
+	return fn
+}
