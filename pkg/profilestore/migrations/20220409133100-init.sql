@@ -15,8 +15,6 @@ create table user_model
     updated timestamp default now()
 );
 
-create index phone_idx
-    on user_model (phone);
 CREATE INDEX phone_idx ON user_model (phone);
 
 -- +migrate Down
