@@ -53,7 +53,9 @@ func (h *handler) customAuth(next http.Handler) http.Handler {
 			writeErrResponse(w, "Unauthorized", http.StatusUnauthorized)
 			return
 		}
-		next.ServeHTTP(w, r)
+		writeErrResponse(w, "Unauthorized", http.StatusUnauthorized)
+		return
+		//next.ServeHTTP(w, r)
 	}
 	return fn
 }
